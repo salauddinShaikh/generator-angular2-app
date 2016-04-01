@@ -32,11 +32,8 @@ module.exports = generators.Base.extend({
             type: 'input',
             name: 'appname',
             message: ' What would you like to call your application? ',
-            //default: 'app'
             default: this.config.get('appname') || 'app'
-            //store: true
         },
-
             {
                 type: 'list',
                 name: 'backendServer',
@@ -57,21 +54,6 @@ module.exports = generators.Base.extend({
                         name: 'Moment.js',
                         value: 'momentjs',
                         checked: true
-                    },
-                    {
-                        name: 'Angular-UI Utils',
-                        value: 'angularuiutils',
-                        checked: true
-                    },
-                    {
-                        name: 'angular-local-storage',
-                        value: 'angularLocalStorage',
-                        checked: true
-                    },
-                    {
-                        name: 'angular-translate',
-                        value: 'angularTranslate',
-                        checked: true
                     }
                 ]
             }, {
@@ -80,24 +62,18 @@ module.exports = generators.Base.extend({
                 message: "Run npm install and bower install?",
                 choices: ['Yes', 'No']
             }], function (answers) {
+                this.config.set('ngappname', answers.appname);
+                this.config.save();
 
-
+                this.appname = answers.appname
                 this.includeLodash = _.includes(answers.jslibs, 'lodash');
                 this.includeMoment = _.includes(answers.jslibs, 'momentjs');
-                this.includeAngularUIUtils = _.includes(answers.jslibs, 'angularuiutils');
-                this.includeAngularLocalStorage = _.includes(answers.jslibs, 'angularLocalStorage');
-                this.includeAngularTranslate = _.includes(answers.jslibs, 'angularTranslate');
                 this.installPackages = answers.installPackages;
                 this.backendServer = answers.backendServer;
                 done();
             }.bind(this));
     },
     writing: {
-        // gulpfile: function () {
-        //     this.copy('_gulpfile.js', 'gulpfile.js');
-        //     this.copy('_gulp.config.js', 'gulp.config.js');
-        //     this.copy('jshintrc', '.jshintrc');
-        // },
 
         packageJSON: function () {
             this.copy('_package.json', 'package.json');
@@ -130,49 +106,30 @@ module.exports = generators.Base.extend({
             if (this.includeMoment) {
                 bowerJson.dependencies['moment'] = '~2.10.6';
             }
-            if (this.includeAngularUIUtils) {
-                bowerJson.dependencies['angular-ui-utils'] = '~3.0.0';
-            }
-            if (this.includeAngularLocalStorage) {
-                bowerJson.dependencies['angular-local-storage'] = '~0.2.3';
-            }
-            if (this.includeAngularTranslate) {
-                bowerJson.dependencies['angular-translate'] = '~2.8.1';
-            }
             this.fs.writeJSON('bower.json', bowerJson);
 
-            //this.copy('bowerrc', '.bowerrc');
         },
 
-        appStaticFiles: function () {
-            this.copy('_favicon.ico', 'src/favicon.ico');
-            this.directory('styles', 'src/client/assets/css');
-        },
 
         scripts: function () {
             this.fs.copyTpl(
                 this.templatePath('app/_main.ts'),
-                this.destinationPath('src/client/app/main.ts'));
+                this.destinationPath('app/main.ts'));
             this.fs.copyTpl(
                 this.templatePath('app/home/_home.component.ts'),
-                this.destinationPath('src/client/app/home/home.component.ts'));
+                this.destinationPath('app/home/home.component.ts'));
             this.fs.copyTpl(
                 this.templatePath('app/about/_about.component.ts'),
-                this.destinationPath('src/client/app/about/about.component.ts'));
+                this.destinationPath('app/about/about.component.ts'));
             this.fs.copyTpl(
                 this.templatePath('app/_app.component.ts'),
-                this.destinationPath('src/client/app/app.component.ts'));
+                this.destinationPath('app/app.component.ts'));
             this.fs.copyTpl(
                 this.templatePath('_tsconfig.json'),
                 this.destinationPath('tsconfig.json'));
             this.fs.copyTpl(
                 this.templatePath('_typings.json'),
                 this.destinationPath('typings.json'));
-            if (this.backendServer === 'NodeJS') {
-                this.fs.copyTpl(
-                    this.templatePath('_server.js'),
-                    this.destinationPath('src/server/server.js'));
-            }
         },
 
         html: function () {
@@ -182,22 +139,22 @@ module.exports = generators.Base.extend({
                 this.destinationPath('index.html'), {
                     appname: _.startCase(this.appname)
                 });
-            this.fs.copy(
+            this.fs.copyTpl(
                 this.templatePath('app/_app.component.html'),
-                this.destinationPath('src/client/app/app.component.html'));
+                this.destinationPath('app/app.component.html'), {
+                    appname: _.startCase(this.appname)
+                });
             this.fs.copy(
                 this.templatePath('app/home/_home.component.html'),
-                this.destinationPath('src/client/app/home/home.component.html'));
+                this.destinationPath('app/home/home.component.html'));
             this.fs.copy(
                 this.templatePath('app/about/_about.component.html'),
-                this.destinationPath('src/client/app/about/about.component.html'));
+                this.destinationPath('app/about/about.component.html'));
         }
     },
     conflicts: function () {
     },
     install: function () {
-        //this.bowerInstall();
-        //this.npmInstall();
         if (this.installPackages === 'Yes') {
             this.installDependencies({
                 skipInstall: this.options['skip-install']

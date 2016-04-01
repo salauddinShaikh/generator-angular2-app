@@ -3,7 +3,7 @@ import { ROUTER_DIRECTIVES } from 'angular2/router';
 
 @Component({
     selector: 'about',
-    templateUrl: 'src/client/app/about/about.component.html',
+    templateUrl: 'app/about/about.component.html',
     directives: [ROUTER_DIRECTIVES]
 })
 export class AboutComponent { }

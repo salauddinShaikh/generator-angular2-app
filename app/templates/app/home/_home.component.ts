@@ -3,6 +3,6 @@ import { ROUTER_DIRECTIVES } from 'angular2/router';
 
 @Component({
     selector: 'home',
-    templateUrl: 'src/client/app/home/home.component.html',
+    templateUrl: 'app/home/home.component.html',
 })
 export class HomeComponent { }

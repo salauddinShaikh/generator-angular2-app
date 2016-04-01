@@ -7,7 +7,7 @@ import { AboutComponent } from './about/about.component';
 
 @Component({
     selector: 'my-app',
-    templateUrl: 'src/client/app/app.component.html',
+    templateUrl: 'app/app.component.html',
     directives: [ROUTER_DIRECTIVES],
     providers: [ROUTER_PROVIDERS]
 })
