@@ -125,6 +125,9 @@ module.exports = generators.Base.extend({
                 this.templatePath('app/_app.component.ts'),
                 this.destinationPath('app/app.component.ts'));
             this.fs.copyTpl(
+                this.templatePath('app/_routes.ts'),
+                this.destinationPath('app/routes.ts'));
+            this.fs.copyTpl(
                 this.templatePath('_tsconfig.json'),
                 this.destinationPath('tsconfig.json'));
             this.fs.copyTpl(

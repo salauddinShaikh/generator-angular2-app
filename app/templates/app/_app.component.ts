@@ -2,8 +2,7 @@ import {Component} from 'angular2/core';
 import { RouteConfig, ROUTER_DIRECTIVES, ROUTER_PROVIDERS } from 'angular2/router';
 import 'rxjs/Rx'; 
 
-import { HomeComponent } from './home/home.component';
-import { AboutComponent } from './about/about.component';
+import {Routes} from './routes'
 
 @Component({
     selector: 'my-app',
@@ -11,8 +10,5 @@ import { AboutComponent } from './about/about.component';
     directives: [ROUTER_DIRECTIVES],
     providers: [ROUTER_PROVIDERS]
 })
-@RouteConfig([
-    { path: '/home', name: 'Home', component: HomeComponent, useAsDefault: true },
-    { path: '/about', name: 'About', component: AboutComponent }
-])
+@RouteConfig(Routes)
 export class AppComponent { }
